@@ -10,8 +10,17 @@ const schema = a.schema({
   Todo: a
     .model({
       content: a.string(),
+      notes: a.hasMany('Notes', 'todoId')
     })
     .authorization((allow) => [allow.guest()]),
+  
+  Notes: a
+    .model({
+      content: a.string().required(),
+      todoId: a.id().required(),
+      todo: a.belongsTo('Todo', 'todoId'),
+    })
+    .authorization(allow => [allow.guest()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
